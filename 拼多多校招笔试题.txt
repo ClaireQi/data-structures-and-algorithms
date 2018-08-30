@@ -1,0 +1,140 @@
+4道编程题
+（1）
+游戏，血量为HP，两种攻击方式，每次攻击normAttact，聚力一次（此次不攻击），然后攻击为attact2，敌人血量<=0，胜利，问胜利的最小轮数。
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main()
+{
+	int HP = 0;
+	int na = 0;
+	int ba = 0;
+	cin >> HP;
+	cin >> na;
+	cin >> ba;
+	int twoA = 0;
+	if (2 * na > ba)
+		twoA = 2 * na;
+	else
+		twoA = ba;
+	int temp = HP / twoA;
+	int temp2 = HP % twoA;
+	int result = 0;
+	if (temp2 == 0)
+		result = 2 * temp;
+	else if (HP <= temp*twoA + na)
+		result = 2 * temp + 1;
+	else
+		result = 2 * temp + 2;
+	if (HP <= na)
+		cout << 1 << endl;
+	else
+		cout << result << endl;
+
+
+	return 0;
+}
+
+（2）N*M的棋盘，格子里有障碍x，方块o，空格.， 障碍不会动，方块会下落，问棋盘最后的状态
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main()
+{
+	int N, M;
+	cin >> N;
+	cin >> M;
+	char** arr = new char* [N];
+	for (int i = 0;i < N;++i)
+	{
+		arr[i] = new char[M];
+		for (int j = 0;j < M;++j)
+		{
+			cin >> arr[i][j];
+		}
+	}
+	for (int j = 0;j < M;++j)
+	{
+		char flag = false;
+		int end = N;
+		for (int i = N - 1;i >= 0;--i)
+		{
+			if (arr[i][j] == 'x')
+			{
+				flag = true;
+				end = i;
+			}
+			if (flag == false && arr[i][j] != 'x')
+			{
+				arr[i][j] = '.';
+			}
+			if (flag == true)
+			{
+				if (arr[i][j] == 'o')
+				{
+					arr[i][j] = '.';
+					arr[--end][j] = 'o';
+				}
+			}
+				
+		}
+	}
+	for (int i = 0;i < N;++i)
+	{
+		for (int j = 0;j < M;++j)
+		{
+			cout << arr[i][j];
+		}
+		cout << endl;
+	}
+	for (int i = 0;i < N;++i)
+	{
+		delete[] arr[i];
+	}
+	delete[] arr;
+
+	return 0;
+}
+
+（3）给定被除数a，除数b，问循环小数的起始位置和循环的长度（小数点后第一位记为第0位）
+#include<iostream>
+#include<string>
+#include<map>
+using namespace std;
+
+int main()
+{
+	int a, b;
+	cin >> a;
+	cin >> b;
+
+	map<int, int> pos;
+	
+	int count = 0;
+	int r = a%b;
+	pos[r] = 0;
+	while (1 && r!=0)
+	{
+		r = (r * 10) % b;
+		map<int,int>:: iterator iter = pos.find(r);
+		if (iter != pos.end())
+		{
+			++count;
+			break;
+		}
+		else
+		{
+			++count;
+			pos[r] = count;
+			
+		}
+
+	}
+	cout << pos[r] << ' ' << count - pos[r];
+
+	return 0;
+}
+（4）给定N个单词，每个单词长度为L，从每个单词的第一个字母中抽取一个字母作为新单词的一个字母，抽取第二个字母作为新单词的第二个字母，依次类推。 输出不在已有单词中出现的新单词，若有多个新单词满足条件则输出字典序最小的一个，若不存在则输出“-”。
+【没做出来】
