@@ -1,0 +1,85 @@
+# 携程笔试题 计算单变量的信息增益
+
+#include<iostream>
+#include<string>
+#include<map>
+#include<vector>
+#include<stack>
+#include<deque>
+#include<queue>
+#include<math.h>
+using namespace std;
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	double labelCount = 0.0;
+	int** arr = new int*[n];
+	for (int i = 0;i < n;++i)
+	{
+		arr[i] = new int[2];
+		for (int j = 0;j < 2;++j)
+		{
+			cin >> arr[i][j];
+			if (j == 1 && arr[i][j] == 1)
+				++labelCount;
+		}
+	}
+	double p1 = labelCount / n;
+	double p2 = 1 - p1;
+
+	double h1 = (-1)*( p1 * log(p1) / log(2) + p2 * log(p2) / log(2));
+
+	int ** label = new int*[n];
+	for (int i = 0;i < n;++i)
+	{
+		label[i] = new int[2];
+		for (int j = 0;j < 2;++j)
+		{
+			label[i][j] = 0;
+		}
+
+	}
+	for (int i = 0;i < n;++i)
+	{
+		if (arr[i][1] == 1)
+			label[arr[i][0]][0] += 1;
+		else
+			label[arr[i][0]][1] += 1;
+	}
+	double h2 = 0.0;
+	for (int i = 0;i < n;++i)
+	{
+		if ((label[i][0] != 0 || label[i][1]) != 0)
+		{
+			double p1 = 1.0 * label[i][0] / (label[i][0] + label[i][1]);
+			double p2 = 1.0 * label[i][1] / (label[i][0] + label[i][1]);
+			double count = 1.0*(label[i][0] + label[i][1]) / n;
+			if (p1 != 0 && p2 != 0)
+				h2 += (-1.0) * count * (p1 * log(p1) / log(2) + p2 * log(p2) / log(2));
+			else if (p1 != 0 && p2 == 0)
+				h2 += (-1.0) * count * (p1 * log(p1) / log(2));
+			else if (p1 == 0 && p2 != 0)
+				h2 += (-1.0) * count * (p2 * log(p2) / log(2));
+		}
+
+
+	}
+	double temp = h1 - h2;
+	double result = (int)(temp * 100 + 0.5) / 100.0;
+	cout << result << endl;
+
+
+
+	for (int i = 0;i < n;++i)
+	{
+		delete[] arr[i];
+	}
+	delete[] arr;
+
+	return 0;
+}
+
+# 计算KL散度
